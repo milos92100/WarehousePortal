@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WarehousePortal.Service;
 
 namespace WarehousePortal
 {
@@ -17,43 +18,18 @@ namespace WarehousePortal
         [STAThread]
         static void Main()
         {
-            SQLiteConnection dbConnection = null;
-
-            if (!File.Exists("MyDatabase.sqlite"))
+            var service = new ArticleService();
+            try
             {
-                Console.WriteLine("create db");
-                SQLiteConnection.CreateFile("MyDatabase.sqlite");
-
-                dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
-                dbConnection.Open();
-
-                string sql = "CREATE TABLE highscores (name VARCHAR(20), score INT)";
-                SQLiteCommand command = new SQLiteCommand(sql, dbConnection);
-                command.ExecuteNonQuery();
+                var result = service.Add(1001, "Test1Name", "Test1Desc", new Decimal(22.33), 5);
+                Console.WriteLine("Insert Id =" + result.Id);
             }
-            else
+            catch(Exception e)
             {
-                dbConnection = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
-                dbConnection.Open();
+                Console.WriteLine(e.Message);
             }
-            
 
-            string sql1 = "insert into highscores (name, score) values ('Me', 3000)";
-            SQLiteCommand command1 = new SQLiteCommand(sql1, dbConnection);
-            command1.ExecuteNonQuery();
-            sql1 = "insert into highscores (name, score) values ('Myself', 6000)";
-            command1 = new SQLiteCommand(sql1, dbConnection);
-            command1.ExecuteNonQuery();
-            sql1 = "insert into highscores (name, score) values ('And I', 9001)";
-            command1 = new SQLiteCommand(sql1, dbConnection);
-            command1.ExecuteNonQuery();
-
-            string sql2 = "select * from highscores order by score desc";
-            SQLiteCommand command2 = new SQLiteCommand(sql2, dbConnection);
-            SQLiteDataReader reader = command2.ExecuteReader();
-            while (reader.Read())
-                Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
-
+          
 
 
             Application.EnableVisualStyles();

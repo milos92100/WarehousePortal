@@ -21,10 +21,13 @@ namespace WarehousePortal
             var service = new ArticleService();
             try
             {
-                var result = service.Add(1001, "Test1Name", "Test1Desc", new Decimal(22.33), 5);
-                Console.WriteLine("Insert Id =" + result.Id);
+                //var result = service.Add(1001, "Test1Name", "Test1Desc", new Decimal(22.33), 5);
+                //Console.WriteLine("Insert Id =" + result.GetId());
+
+                var result = service.GetAll();
+                Console.WriteLine("Count" + result.Count);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }

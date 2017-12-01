@@ -20,21 +20,21 @@ namespace WarehousePortal.Repository
             this.Connection = Connection;
         }
 
-        public DbResult<int> Add(Article article)
+        public DbResult<long> Add(Article article)
         {
-            var result = new DbResult<int>();
+            var result = new DbResult<long>();
             try
             {
                 SQLiteCommand cmd = new SQLiteCommand(INSERT, Connection);
-                cmd.Parameters.AddWithValue("@ArtNo", article.ArtNo);
-                cmd.Parameters.AddWithValue("@Name", article.Name);
-                cmd.Parameters.AddWithValue("@Description", article.Description);
-                cmd.Parameters.AddWithValue("@Price", article.Price);
-                cmd.Parameters.AddWithValue("@Quant", article.Quant);
+                cmd.Parameters.AddWithValue("@ArtNo", article.GetArtNo());
+                cmd.Parameters.AddWithValue("@Name", article.GetName());
+                cmd.Parameters.AddWithValue("@Description", article.GetDescription());
+                cmd.Parameters.AddWithValue("@Price", article.GetPrice());
+                cmd.Parameters.AddWithValue("@Quant", article.GetQuant());
 
                 cmd.ExecuteNonQuery();
 
-                result.Data = unchecked((int)Connection.LastInsertRowId);
+                result.Data = Connection.LastInsertRowId;
                 result.Status = DbResultStatus.OK;
                 result.Msg = "Ok";
             }
@@ -48,5 +48,44 @@ namespace WarehousePortal.Repository
             return result;
         }
 
+        public DbResult<List<Article>> getAll()
+        {
+            var result = new DbResult<List<Article>>();
+            try
+            {
+                string sql = "SELECT * FROM `articles` ORDER BY `ArtNo`";
+                SQLiteCommand cmd = new SQLiteCommand(sql, Connection);
+                SQLiteDataReader reader = cmd.ExecuteReader();
+
+                var articles = new List<Article>();
+                while (reader.Read())
+                {
+                    reader.GetDouble(reader.GetOrdinal("Id"));
+
+                    articles.Add(
+                        new Article(
+                            (long)reader.GetDouble(reader.GetOrdinal("Id")),
+                            reader.GetInt32(reader.GetOrdinal("ArtNo")),
+                            reader.GetString(reader.GetOrdinal("Name")),
+                            reader.GetString(reader.GetOrdinal("Description")),
+                            reader.GetDecimal(reader.GetOrdinal("Price")),
+                            reader.GetInt32(reader.GetOrdinal("Quant")))
+                    );
+                }
+                result.Data = articles;
+                result.Status = DbResultStatus.OK;
+                result.Msg = "Ok";
+            }
+            catch (Exception ex)
+            {
+                result.Data = null;
+                result.Status = DbResultStatus.ERROR;
+                result.Msg = ex.Message;
+            }
+
+            return result;
+        }
+
     }
+
 }

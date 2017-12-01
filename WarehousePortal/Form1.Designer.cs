@@ -34,8 +34,13 @@ namespace WarehousePortal
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.score = new System.Windows.Forms.DataGridViewTextBoxColumn();
+
+            var ArtNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Quant = new System.Windows.Forms.DataGridViewTextBoxColumn();
+
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -78,25 +83,18 @@ namespace WarehousePortal
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.name,
-            this.score});
+                 ArtNo,
+                 Name,
+                 Description ,
+                 Price ,
+                 Quant 
+            });
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(685, 737);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // name
-            // 
-            this.name.FillWeight = 18.23899F;
-            this.name.HeaderText = "name";
-            this.name.Name = "name";
-            // 
-            // score
-            // 
-            this.score.FillWeight = 181.761F;
-            this.score.HeaderText = "score";
-            this.score.Name = "score";
+           
             // 
             // label1
             // 
@@ -171,8 +169,7 @@ namespace WarehousePortal
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn score;
+         
         private TextBox textBox2;
         private TextBox textBox1;
         private Label label3;

@@ -14,9 +14,9 @@ namespace WarehousePortal.Entity
         private String Description;
         private Decimal Price;
         private int Quant;
+        private DateTime DateTimeAdded;
 
-
-        public Article(long Id, int ArtNo, String Name, String Description, Decimal Price, int Quant)
+        public Article(long Id, int ArtNo, String Name, String Description, Decimal Price, int Quant, DateTime DateTimeAdded)
         {
             if (ArtNo < 1)
             {
@@ -49,6 +49,7 @@ namespace WarehousePortal.Entity
             this.Description = Description;
             this.Price = Price;
             this.Quant = Quant;
+            this.DateTimeAdded = DateTimeAdded;
         }
 
         public void AssignId(long Id)
@@ -85,12 +86,14 @@ namespace WarehousePortal.Entity
             return Quant;
         }
 
+        public DateTime GetDateTimeAdded()
+        {
+            return DateTimeAdded;
+        }
+
         public String[] ToTableRowValues()
         {
             return new string[] { ArtNo.ToString(), Name, Description, Price.ToString(), Quant.ToString() };
         }
-
-
-
     }
 }

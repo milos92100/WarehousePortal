@@ -32,7 +32,7 @@ namespace WarehousePortal
                 Console.WriteLine(e.Message);
             }
 
-          
+
 
 
             Application.EnableVisualStyles();
@@ -40,7 +40,7 @@ namespace WarehousePortal
             Application.Run(new Warehouse());
 
 
-            
+
 
 
         }

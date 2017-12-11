@@ -9,16 +9,12 @@ using WarehousePortal.Entity;
 
 namespace WarehousePortal.Repository
 {
-    class ArticleRepository
+    class ArticleRepository : WarehousePortal.Core.Repository
     {
-        private const String INSERT = "INSERT INTO `articles` (`ArtNo`,`Name`,`Description`,`Price`,`Quant` ) VALUES ( @ArtNo, @Name, @Description, @Price, @Quant);";
+        private const String INSERT = "INSERT INTO `articles` (`ArtNo`,`Name`,`Description`,`Price`,`Quant`, DateTimeAdded ) VALUES ( @ArtNo, @Name, @Description, @Price, @Quant, @DateTimeAdded);";
 
-        private SQLiteConnection Connection = null;
-
-        public ArticleRepository(SQLiteConnection Connection)
-        {
-            this.Connection = Connection;
-        }
+        public ArticleRepository(SQLiteConnection Connection) : base(Connection)
+        { }
 
         public DbResult<long> Add(Article article)
         {
@@ -31,6 +27,7 @@ namespace WarehousePortal.Repository
                 cmd.Parameters.AddWithValue("@Description", article.GetDescription());
                 cmd.Parameters.AddWithValue("@Price", article.GetPrice());
                 cmd.Parameters.AddWithValue("@Quant", article.GetQuant());
+                cmd.Parameters.AddWithValue("@DateTimeAdded", article.GetDateTimeAdded().ToString(DateTimeDbFormat));
 
                 cmd.ExecuteNonQuery();
 
@@ -38,8 +35,8 @@ namespace WarehousePortal.Repository
                 result.Status = DbResultStatus.OK;
                 result.Msg = "Ok";
             }
-            catch(Exception ex)
-            { 
+            catch (Exception ex)
+            {
                 result.Data = 0;
                 result.Status = DbResultStatus.ERROR;
                 result.Msg = ex.Message;
@@ -69,7 +66,8 @@ namespace WarehousePortal.Repository
                             reader.GetString(reader.GetOrdinal("Name")),
                             reader.GetString(reader.GetOrdinal("Description")),
                             reader.GetDecimal(reader.GetOrdinal("Price")),
-                            reader.GetInt32(reader.GetOrdinal("Quant")))
+                            reader.GetInt32(reader.GetOrdinal("Quant")),
+                            reader.GetDateTime(reader.GetOrdinal("DateTimeAdded")))
                     );
                 }
                 result.Data = articles;

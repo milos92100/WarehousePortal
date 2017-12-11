@@ -16,11 +16,12 @@ namespace WarehousePortal.Service
 
         public Article Add(int ArtNo, String Name, String Description, Decimal Price, int Quant)
         {
-           
-            var article = new Article(0, ArtNo, Name, Description, Price, Quant);
-           
+
+            var article = new Article(0, ArtNo, Name, Description, Price, Quant, DateTime.UtcNow);
+
             var result = GetRepository().Add(article);
-            switch (result.Status) {
+            switch (result.Status)
+            {
                 case DbResultStatus.OK:
                     article.AssignId(result.Data);
                     break;
@@ -50,7 +51,7 @@ namespace WarehousePortal.Service
 
         protected ArticleRepository GetRepository()
         {
-            if(Repository == null)
+            if (Repository == null)
             {
                 Repository = new ArticleRepository(Data.GetConnection());
             }

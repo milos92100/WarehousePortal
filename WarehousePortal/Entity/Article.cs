@@ -9,18 +9,18 @@ namespace WarehousePortal.Entity
     class Article
     {
         private long Id;
-        private int ArtNo;
+        private String ArtNo;
         private String Name;
         private String Description;
         private Decimal Price;
         private int Quant;
         private DateTime DateTimeAdded;
 
-        public Article(long Id, int ArtNo, String Name, String Description, Decimal Price, int Quant, DateTime DateTimeAdded)
+        public Article(long Id, String ArtNo, String Name, String Description, Decimal Price, int Quant, DateTime DateTimeAdded)
         {
-            if (ArtNo < 1)
+            if (String.IsNullOrEmpty(ArtNo))
             {
-                throw new ArgumentOutOfRangeException("Article number must be greater than 0");
+                throw new ArgumentOutOfRangeException("Article number must not be empty");
             }
 
             if (String.IsNullOrEmpty(Name))
@@ -38,7 +38,7 @@ namespace WarehousePortal.Entity
                 throw new ArgumentException("Price must be greater than 0");
             }
 
-            if (Quant < 1)
+            if (Quant < 0)
             {
                 throw new ArgumentException("Quant must be greater than 0");
             }
@@ -62,7 +62,7 @@ namespace WarehousePortal.Entity
             return Id;
         }
 
-        public int GetArtNo()
+        public String GetArtNo()
         {
             return ArtNo;
         }
@@ -93,7 +93,7 @@ namespace WarehousePortal.Entity
 
         public String[] ToTableRowValues()
         {
-            return new string[] { ArtNo.ToString(), Name, Description, Price.ToString(), Quant.ToString() };
+            return new string[] { ArtNo.ToString(), Name, Description, Price.ToString("0.00"), Quant.ToString() };
         }
     }
 }

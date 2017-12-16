@@ -12,10 +12,17 @@ namespace WarehousePortal
         private System.ComponentModel.IContainer components = null;
 
 
+        public const String ADD_QUANT_COLUMN_NAME = "AddQuant";
+        public const String SUB_QUANT_COLUMN_NAME = "SubQuant";
+        public const String UPDATE_PRICE_NAME = "UpdatePrice";
+
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridView dataGridView1;
+
+        private Label SearchLabel;
+        private TextBox SearchTextBox;
 
         private TextBox ArtNoTextBox;
         private TextBox NameTextBox;
@@ -62,20 +69,45 @@ namespace WarehousePortal
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.dataGridView1.MultiSelect = false;
 
-            var ArtNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var formGroup = new GroupBox();
+
+            var ArtNo = new DataGridViewTextBoxColumn();
             ArtNo.HeaderText = "Artikel Nu.";
+            ArtNo.ReadOnly = true;
 
-            var Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Name = new DataGridViewTextBoxColumn();
             Name.HeaderText = "Name";
+            Name.ReadOnly = true;
 
-            var Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Description = new DataGridViewTextBoxColumn();
             Description.HeaderText = "Beschreibung";
 
-            var Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Price = new DataGridViewTextBoxColumn();
             Price.HeaderText = "Preis";
 
-            var Quant = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            var Quant = new DataGridViewTextBoxColumn();
             Quant.HeaderText = "Menge";
+            Quant.ReadOnly = true;
+
+            var AddQuantColumn = new DataGridViewButtonColumn();
+            AddQuantColumn.Text = "Hinzufügen";
+            AddQuantColumn.UseColumnTextForButtonValue = true;
+            AddQuantColumn.Tag = ADD_QUANT_COLUMN_NAME;
+
+            var SubQuantColumn = new DataGridViewButtonColumn();
+            SubQuantColumn.Text = "Abziehen";
+            SubQuantColumn.UseColumnTextForButtonValue = true;
+            SubQuantColumn.Tag = SUB_QUANT_COLUMN_NAME;
+
+            var UpdatePriceColumn = new DataGridViewButtonColumn();
+            UpdatePriceColumn.Text = "Preis ändern";
+            UpdatePriceColumn.UseColumnTextForButtonValue = true;
+            UpdatePriceColumn.Tag = UPDATE_PRICE_NAME;
+
+
+            this.SearchLabel  = new System.Windows.Forms.Label();
+            this.SearchLabel.Text = "Suche nach Artikelnummer: ";
+            this.SearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
             this.ArtNoLabel = new System.Windows.Forms.Label();
             this.ArtNoLabel.Text = "Artikel Nu.";
@@ -97,12 +129,13 @@ namespace WarehousePortal
             this.QuantLabel.Text = "Menge";
             this.QuantLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
+            this.SearchTextBox = new System.Windows.Forms.TextBox();
+
             this.ArtNoTextBox = new System.Windows.Forms.TextBox();
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.DescriptionTextBox = new System.Windows.Forms.TextBox();
             this.PriceTextBox = new System.Windows.Forms.TextBox();
             this.QuantTextBox = new System.Windows.Forms.TextBox();
-
 
             this.ResetButton = new System.Windows.Forms.Button();
             this.ResetButton.Text = "Neu fassen";
@@ -123,20 +156,31 @@ namespace WarehousePortal
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.Controls.Add(this.ArtNoTextBox);
-            this.panel1.Controls.Add(this.NameTextBox);
-            this.panel1.Controls.Add(this.DescriptionTextBox);
-            this.panel1.Controls.Add(this.PriceTextBox);
-            this.panel1.Controls.Add(this.QuantTextBox);
+            formGroup.Controls.Add(this.ArtNoTextBox);
+            formGroup.Controls.Add(this.NameTextBox);
+            formGroup.Controls.Add(this.DescriptionTextBox);
+            formGroup.Controls.Add(this.PriceTextBox);
+            formGroup.Controls.Add(this.QuantTextBox);
 
-            this.panel1.Controls.Add(this.ArtNoLabel);
-            this.panel1.Controls.Add(this.NameLabel);
-            this.panel1.Controls.Add(this.DescriptionLabel);
-            this.panel1.Controls.Add(this.PriceLabel);
-            this.panel1.Controls.Add(this.QuantLabel);
+            formGroup.Controls.Add(this.ArtNoLabel);
+            formGroup.Controls.Add(this.NameLabel);
+            formGroup.Controls.Add(this.DescriptionLabel);
+            formGroup.Controls.Add(this.PriceLabel);
+            formGroup.Controls.Add(this.QuantLabel);
 
-            this.panel1.Controls.Add(this.ResetButton);
-            this.panel1.Controls.Add(this.AddButton);
+            formGroup.Controls.Add(this.ResetButton);
+            formGroup.Controls.Add(this.AddButton);
+
+
+            this.panel1.Controls.Add(this.SearchLabel);
+            this.panel1.Controls.Add(this.SearchTextBox);
+       
+
+            this.panel1.Controls.Add(formGroup);
+            formGroup.Location = new System.Drawing.Point(5, 50);
+            formGroup.Size = new System.Drawing.Size(275, 220);
+            formGroup.Text = "Neuer Artikel";
+            formGroup.TabIndex = 0;
 
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "Neuer Artikel";
@@ -150,7 +194,7 @@ namespace WarehousePortal
             this.panel2.Controls.Add(this.dataGridView1);
             this.panel2.Location = new System.Drawing.Point(287, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(685, 737);
+            this.panel2.Size = new System.Drawing.Size(885, 737);
             this.panel2.TabIndex = 1;
             // 
             // dataGridView1
@@ -162,16 +206,27 @@ namespace WarehousePortal
                  Name,
                  Description ,
                  Price ,
-                 Quant
+                 Quant ,
+                 AddQuantColumn ,
+                 SubQuantColumn ,
+                 UpdatePriceColumn
             });
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 100);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(685, 737);
+            this.dataGridView1.Size = new System.Drawing.Size(885, 737);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellClick += dataGridView1_CellContentClick;
+
+
+
+            this.SearchLabel.AutoSize = true;
+            this.SearchLabel.Location = new System.Drawing.Point(5, 10);
+            this.SearchLabel.Size = new System.Drawing.Size(100, 13);
+            this.SearchLabel.TabIndex = 0;
 
             // 
-            // NameLabel
+            // ArtNoLable
             // 
             this.ArtNoLabel.AutoSize = true;
             this.ArtNoLabel.Location = new System.Drawing.Point(5, 20);
@@ -217,6 +272,12 @@ namespace WarehousePortal
             this.QuantLabel.TabIndex = 2;
 
 
+            
+            this.SearchTextBox.Location = new System.Drawing.Point(160, 10);
+            this.SearchTextBox.Size = new System.Drawing.Size(100, 20);
+            this.SearchTextBox.TabIndex = 3;
+            this.SearchTextBox.TextChanged += OnSearchInput;
+
             // 
             // ArtNoTextBox
             // 
@@ -258,7 +319,7 @@ namespace WarehousePortal
             this.QuantTextBox.Name = "QuantTextBox";
             this.QuantTextBox.Size = new System.Drawing.Size(180, 20);
             this.QuantTextBox.TabIndex = 5;
-            this.QuantTextBox.KeyPress += new KeyPressEventHandler(Number_KeyPress);
+            this.QuantTextBox.KeyPress += new KeyPressEventHandler(Int_KeyPress);
 
             this.ResetButton.Location = new System.Drawing.Point(5, 180);
             this.ResetButton.Size = new System.Drawing.Size(105, 30);
@@ -275,10 +336,10 @@ namespace WarehousePortal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 761);
+            this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.MaximumSize = new System.Drawing.Size(1000, 800);
+            this.MaximumSize = new System.Drawing.Size(1200, 800);
             this.Name = "Warehouse";
             this.Text = "Warehouse";
             this.Load += new System.EventHandler(this.Warehouse_Load);

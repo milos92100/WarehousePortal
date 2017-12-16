@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WarehousePortal.Entity;
 using WarehousePortal.Service;
 
 namespace WarehousePortal
@@ -18,6 +19,8 @@ namespace WarehousePortal
         [STAThread]
         static void Main()
         {
+
+
             var service = new ArticleService();
             try
             {

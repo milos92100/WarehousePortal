@@ -66,9 +66,6 @@ namespace WarehousePortal
 
         private void ResetFields()
         {
-
-            var selectedIndex = dataGridView1.CurrentCell.RowIndex;
-
             ArtNoTextBox.Text = "";
             NameTextBox.Text = "";
             DescriptionTextBox.Text = "";

@@ -112,7 +112,7 @@ namespace WarehousePortal
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex < 0 || e.RowIndex > (articles.Count - 1))
+            if (e.ColumnIndex < 0 || e.RowIndex > (articles.Count - 1) || e.RowIndex < 0)
             {
                 return;
             }

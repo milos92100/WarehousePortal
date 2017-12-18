@@ -81,6 +81,7 @@ namespace WarehousePortal
 
             var Description = new DataGridViewTextBoxColumn();
             Description.HeaderText = "Beschreibung";
+            Description.ReadOnly = true;
 
             var Price = new DataGridViewTextBoxColumn();
             Price.HeaderText = "Preis";

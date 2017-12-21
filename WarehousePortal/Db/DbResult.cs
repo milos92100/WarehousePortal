@@ -17,7 +17,6 @@ namespace WarehousePortal.Db
         public String Msg { get; set; }
         public T Data { get; set; }
 
-
         public DbResult() {}
 
         public DbResult(DbResultStatus Status, string Msg, T Data)
@@ -26,6 +25,5 @@ namespace WarehousePortal.Db
             this.Msg = Msg;
             this.Data = Data;
         }
-
     }
 }

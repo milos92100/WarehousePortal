@@ -18,7 +18,7 @@ namespace WarehousePortal.Repository
         private const String UPDATE_PRICE = "UPDATE `articles` SET `Price` = @Quant WHERE `Id` = @Id";
 
         public ArticleRepository(SQLiteConnection Connection) : base(Connection)
-        { }
+        {}
 
         public DbResult<long> Add(Article article)
         {
@@ -72,7 +72,6 @@ namespace WarehousePortal.Repository
             }
 
             return result;
-
         }
 
         public DbResult<int> UpdatePrice(long ArticleId, decimal NewPrice)
@@ -98,7 +97,6 @@ namespace WarehousePortal.Repository
             }
 
             return result;
-
         }
 
         public DbResult<List<Article>> GetAllByArtNo(String ArtNo)
@@ -213,7 +211,5 @@ namespace WarehousePortal.Repository
 
             return result;
         }
-
     }
-
 }

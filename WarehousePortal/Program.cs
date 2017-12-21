@@ -19,32 +19,9 @@ namespace WarehousePortal
         [STAThread]
         static void Main()
         {
-
-
-            var service = new ArticleService();
-            try
-            {
-                //var result = service.Add(1001, "Test1Name", "Test1Desc", new Decimal(22.33), 5);
-                //Console.WriteLine("Insert Id =" + result.GetId());
-
-                var result = service.GetAll();
-                Console.WriteLine("Count" + result.Count);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-
-
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Warehouse());
-
-
-
-
 
         }
     }

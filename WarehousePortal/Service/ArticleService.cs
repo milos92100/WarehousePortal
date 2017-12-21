@@ -11,7 +11,6 @@ namespace WarehousePortal.Service
 {
     class ArticleService
     {
-
         protected ArticleRepository Repository = null;
 
         public Article Add(String ArtNo, String Name, String Description, Decimal Price, int Quant)
@@ -174,6 +173,5 @@ namespace WarehousePortal.Service
             }
             return Repository;
         }
-
     }
 }

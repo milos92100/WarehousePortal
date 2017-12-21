@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using WarehousePortal.View;
 
 namespace WarehousePortal
 {
@@ -106,7 +107,7 @@ namespace WarehousePortal
             UpdatePriceColumn.Tag = UPDATE_PRICE_NAME;
 
 
-            this.SearchLabel  = new System.Windows.Forms.Label();
+            this.SearchLabel = new System.Windows.Forms.Label();
             this.SearchLabel.Text = "Suche nach Artikelnummer: ";
             this.SearchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
@@ -147,7 +148,7 @@ namespace WarehousePortal
             this.AddButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            
+
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -175,7 +176,7 @@ namespace WarehousePortal
 
             this.panel1.Controls.Add(this.SearchLabel);
             this.panel1.Controls.Add(this.SearchTextBox);
-       
+
 
             this.panel1.Controls.Add(formGroup);
             formGroup.Location = new System.Drawing.Point(5, 50);
@@ -273,7 +274,7 @@ namespace WarehousePortal
             this.QuantLabel.TabIndex = 2;
 
 
-            
+
             this.SearchTextBox.Location = new System.Drawing.Point(160, 10);
             this.SearchTextBox.Size = new System.Drawing.Size(100, 20);
             this.SearchTextBox.TabIndex = 3;
@@ -286,7 +287,7 @@ namespace WarehousePortal
             this.ArtNoTextBox.Name = "ArtNoTextBox";
             this.ArtNoTextBox.Size = new System.Drawing.Size(180, 20);
             this.ArtNoTextBox.TabIndex = 3;
-            this.ArtNoTextBox.KeyPress += new KeyPressEventHandler(Int_KeyPress);
+            this.ArtNoTextBox.KeyPress += new KeyPressEventHandler(Helper.Int_KeyPress);
 
             // 
             // NameTextBox
@@ -295,7 +296,7 @@ namespace WarehousePortal
             this.NameTextBox.Name = "NameTextBox";
             this.NameTextBox.Size = new System.Drawing.Size(180, 20);
             this.NameTextBox.TabIndex = 4;
-           
+
             // 
             // DescriptionTextBox
             // 
@@ -311,7 +312,7 @@ namespace WarehousePortal
             this.PriceTextBox.Name = "PriceTextBox";
             this.PriceTextBox.Size = new System.Drawing.Size(180, 20);
             this.PriceTextBox.TabIndex = 5;
-            this.PriceTextBox.KeyPress += new KeyPressEventHandler(Number_KeyPress);
+            this.PriceTextBox.KeyPress += new KeyPressEventHandler(Helper.Number_KeyPress);
 
             // 
             // QuantTextBox
@@ -320,12 +321,12 @@ namespace WarehousePortal
             this.QuantTextBox.Name = "QuantTextBox";
             this.QuantTextBox.Size = new System.Drawing.Size(180, 20);
             this.QuantTextBox.TabIndex = 5;
-            this.QuantTextBox.KeyPress += new KeyPressEventHandler(Int_KeyPress);
+            this.QuantTextBox.KeyPress += new KeyPressEventHandler(Helper.Int_KeyPress);
 
             this.ResetButton.Location = new System.Drawing.Point(5, 180);
             this.ResetButton.Size = new System.Drawing.Size(105, 30);
             this.ResetButton.Click += new System.EventHandler(this.resetButton_Click);
-            
+
 
             this.AddButton.Location = new System.Drawing.Point(110, 180);
             this.AddButton.Size = new System.Drawing.Size(105, 30);
@@ -354,30 +355,6 @@ namespace WarehousePortal
 
 
         #endregion
-        private void Number_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-
-            // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void Int_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-
-        }
-
 
     }
 }

@@ -28,18 +28,11 @@ namespace WarehousePortal.View
             prompt.Controls.Add(confirmation);
             prompt.Controls.Add(textLabel);
             prompt.AcceptButton = confirmation;
-            textBox.KeyPress += new KeyPressEventHandler(Int_KeyPress);
+            textBox.KeyPress += new KeyPressEventHandler(Helper.Number_KeyPress);
 
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
-        private static void Int_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-
-        }
+        
     }
 }

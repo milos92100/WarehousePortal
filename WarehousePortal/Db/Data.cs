@@ -51,6 +51,5 @@ namespace WarehousePortal.Db
         {
             return File.Exists(DB_NAME);
         }
-
     }
 }

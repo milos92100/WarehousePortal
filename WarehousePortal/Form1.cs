@@ -15,7 +15,6 @@ namespace WarehousePortal
 {
     public partial class Warehouse : Form
     {
-
         private ArticleService ArticleService = new ArticleService();
         private List<Article> articles = new List<Article>();
 
@@ -120,8 +119,13 @@ namespace WarehousePortal
             var senderGrid = (DataGridView)sender;
             var column = senderGrid.Columns[e.ColumnIndex];
 
-            if (column.Tag.ToString() != ADD_QUANT_COLUMN_NAME && column.Tag.ToString() 
-                != SUB_QUANT_COLUMN_NAME && column.Tag.ToString() 
+            if (column.Tag == null)
+            {
+                return;
+            }
+
+            if (column.Tag.ToString() != ADD_QUANT_COLUMN_NAME && column.Tag.ToString()
+                != SUB_QUANT_COLUMN_NAME && column.Tag.ToString()
                 != UPDATE_PRICE_NAME)
             {
                 return;
@@ -160,7 +164,7 @@ namespace WarehousePortal
                     }
                     else if (column.Tag.ToString() == UPDATE_PRICE_NAME)
                     {
-                        input = ChangeQuantPrompt.ShowDialog("Preis :", "Preis ändern fur " + article.GetArtNo());
+                        input = ChangePricePrompt.ShowDialog("Preis :", "Preis ändern fur " + article.GetArtNo());
                         if (String.IsNullOrEmpty(input))
                         {
                             return;
@@ -187,16 +191,6 @@ namespace WarehousePortal
 
                 Console.WriteLine("columnt clicked: " + articles[e.RowIndex].GetArtNo() + "; ColumnName=" + column.Name + "; input=" + input);
             }
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

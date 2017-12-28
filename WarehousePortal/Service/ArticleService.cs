@@ -34,7 +34,7 @@ namespace WarehousePortal.Service
                     article.AssignId(result.Data);
                     break;
                 case DbResultStatus.ERROR:
-                    throw new OperationCanceledException("Vorgang fehlgeschlagen. Datenbankfehler ist aufgetreten.");
+                    throw new OperationCanceledException(result.Msg);
             }
 
             return article;
@@ -141,7 +141,7 @@ namespace WarehousePortal.Service
                     return NewPrice;
 
                 case DbResultStatus.ERROR:
-                    throw new OperationCanceledException("Operation failed.Database error accured.");
+                    throw new OperationCanceledException(result.Msg);
 
                 default:
                     throw new OperationCanceledException("Operation failed.Database error accured.");
@@ -160,7 +160,7 @@ namespace WarehousePortal.Service
                     break;
 
                 case DbResultStatus.ERROR:
-                    throw new OperationCanceledException("Operation failed.Database error accured.");
+                    throw new OperationCanceledException(result.Msg);
             }
             return articles;
         }

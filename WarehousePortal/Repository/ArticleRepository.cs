@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WarehousePortal.Db;
 using WarehousePortal.Entity;
+using WarehousePortal.Core;
 
 namespace WarehousePortal.Repository
 {
     class ArticleRepository : WarehousePortal.Core.Repository
     {
+        private Logger _logger = null;
+
         private const String INSERT = "INSERT INTO `articles` (`ArtNo`,`Name`,`Description`,`Price`,`Quant`, DateTimeAdded ) VALUES ( @ArtNo, @Name, @Description, @Price, @Quant, @DateTimeAdded);";
         private const String GET_ALL_LIKE_ART_NO = "SELECT * FROM `articles` WHERE `ArtNo` LIKE @ArtNo";
         private const String GET_ONE_BY_NAME = "SELECT * FROM `articles` WHERE `Name` = @Name LIMIT 1";
@@ -18,20 +21,37 @@ namespace WarehousePortal.Repository
         private const String UPDATE_PRICE = "UPDATE `articles` SET `Price` = @Quant WHERE `Id` = @Id";
 
         public ArticleRepository(SQLiteConnection Connection) : base(Connection)
-        {}
+        {
+            _logger = Logger.getInstance();
+        }
 
         public DbResult<long> Add(Article article)
         {
             var result = new DbResult<long>();
             try
             {
+
+                _logger.Debug("ArticleRepository.Add -> Begin");
+
                 SQLiteCommand cmd = new SQLiteCommand(INSERT, Connection);
                 cmd.Parameters.AddWithValue("@ArtNo", article.GetArtNo());
+                _logger.Debug("ArtNo=" + article.GetArtNo());
+
                 cmd.Parameters.AddWithValue("@Name", article.GetName());
+                _logger.Debug("Name=" + article.GetName());
+
                 cmd.Parameters.AddWithValue("@Description", article.GetDescription());
+                _logger.Debug("Description=" + article.GetDescription());
+
                 cmd.Parameters.AddWithValue("@Price", article.GetPrice().ToString("0.00"));
+                _logger.Debug("Price=" + article.GetPrice().ToString("0.00"));
+
                 cmd.Parameters.AddWithValue("@Quant", article.GetQuant());
+                _logger.Debug("Quant=" + article.GetQuant());
+
                 cmd.Parameters.AddWithValue("@DateTimeAdded", article.GetDateTimeAdded().ToString(DateTimeDbFormat));
+                _logger.Debug("DateTimeAdded=" + article.GetDateTimeAdded().ToString(DateTimeDbFormat));
+
 
                 cmd.ExecuteNonQuery();
 
@@ -41,6 +61,7 @@ namespace WarehousePortal.Repository
             }
             catch (Exception ex)
             {
+                _logger.Error("ArticleRepository.Add -> Exception = " + ex.Message + " " + ex.StackTrace);
                 result.Data = 0;
                 result.Status = DbResultStatus.ERROR;
                 result.Msg = ex.Message;
@@ -59,7 +80,7 @@ namespace WarehousePortal.Repository
                 cmd.Parameters.AddWithValue("@Id", ArticleId);
 
                 var AffectedRows = cmd.ExecuteNonQuery();
-                
+
                 result.Data = AffectedRows;
                 result.Status = DbResultStatus.OK;
                 result.Msg = "Ok";
@@ -178,14 +199,26 @@ namespace WarehousePortal.Repository
             var result = new DbResult<List<Article>>();
             try
             {
+                _logger.Debug("ArticleRepository.getAll -> Begin");
+
                 string sql = "SELECT * FROM `articles` ORDER BY `ArtNo`";
                 SQLiteCommand cmd = new SQLiteCommand(sql, Connection);
                 SQLiteDataReader reader = cmd.ExecuteReader();
+
+                _logger.Debug("ArticleRepository.Add -> sql = " + sql);
 
                 var articles = new List<Article>();
                 while (reader.Read())
                 {
                     reader.GetDouble(reader.GetOrdinal("Id"));
+
+                    _logger.Debug("ArticleRepository.Add -> Id = " + reader.GetDouble(reader.GetOrdinal("Id")));
+                    _logger.Debug("ArticleRepository.Add -> ArtNo = " + reader.GetString(reader.GetOrdinal("ArtNo")));
+                    _logger.Debug("ArticleRepository.Add -> Name = " + reader.GetString(reader.GetOrdinal("Name")));
+                    _logger.Debug("ArticleRepository.Add -> Description = " + reader.GetString(reader.GetOrdinal("Description")));
+                    _logger.Debug("ArticleRepository.Add -> Price = " + reader.GetDecimal(reader.GetOrdinal("Price")));
+                    _logger.Debug("ArticleRepository.Add -> Quant = " + reader.GetInt32(reader.GetOrdinal("Quant")));
+                    _logger.Debug("ArticleRepository.Add -> DateTimeAdded = " + reader.GetDateTime(reader.GetOrdinal("DateTimeAdded")));
 
                     articles.Add(
                         new Article(
@@ -204,6 +237,7 @@ namespace WarehousePortal.Repository
             }
             catch (Exception ex)
             {
+                _logger.Error("ArticleRepository.getAll -> Exception = " + ex.Message + " " + ex.StackTrace);
                 result.Data = null;
                 result.Status = DbResultStatus.ERROR;
                 result.Msg = ex.Message;

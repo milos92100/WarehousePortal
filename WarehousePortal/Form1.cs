@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WarehousePortal.Core;
 using WarehousePortal.Entity;
 using WarehousePortal.Service;
 using WarehousePortal.View;
@@ -17,6 +18,8 @@ namespace WarehousePortal
     {
         private ArticleService ArticleService = new ArticleService();
         private List<Article> articles = new List<Article>();
+
+        private Logger _logger = Logger.getInstance();
 
         public Warehouse()
         {
@@ -32,11 +35,18 @@ namespace WarehousePortal
         {
             try
             {
-                var ArtNo = ArtNoTextBox.Text;
-                var Name = NameTextBox.Text;
-                var Description = DescriptionTextBox.Text;
-                var Price = Decimal.Parse(PriceTextBox.Text);
-                var Quant = Int32.Parse(QuantTextBox.Text);
+                String ArtNo = ArtNoTextBox.Text;
+                String Name = NameTextBox.Text;
+                String Description = DescriptionTextBox.Text;
+                Decimal Price = Decimal.Parse(PriceTextBox.Text);
+                int Quant = Int32.Parse(QuantTextBox.Text);
+
+                _logger.Debug("addButton_Click -> begin");
+                _logger.Debug("addButton_Click -> ArtNo=" + ArtNo);
+                _logger.Debug("addButton_Click -> Name=" + Name);
+                _logger.Debug("addButton_Click -> Description=" + Description);
+                _logger.Debug("addButton_Click -> Price=" + Price);
+                _logger.Debug("addButton_Click -> Quant=" + Quant);
 
                 var article = ArticleService.Add(ArtNo, Name, Description, Price, Quant);
 
@@ -75,9 +85,18 @@ namespace WarehousePortal
 
         private void LoadArticles()
         {
-            articles = ArticleService.GetAll();
 
-            LoadArticles(articles);
+            try
+            {
+                articles = ArticleService.GetAll();
+
+                LoadArticles(articles);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void LoadArticles(List<Article> articles)
@@ -124,9 +143,11 @@ namespace WarehousePortal
                 return;
             }
 
-            if (column.Tag.ToString() != ADD_QUANT_COLUMN_NAME && column.Tag.ToString()
-                != SUB_QUANT_COLUMN_NAME && column.Tag.ToString()
-                != UPDATE_PRICE_NAME)
+            if (column.Tag.ToString() != ADD_QUANT_COLUMN_NAME
+                && column.Tag.ToString() != SUB_QUANT_COLUMN_NAME
+                && column.Tag.ToString() != UPDATE_PRICE_NAME
+                && column.Tag.ToString() != DELETE_NAME
+                )
             {
                 return;
             }
@@ -172,6 +193,16 @@ namespace WarehousePortal
                         var price = Decimal.Parse(input);
                         ArticleService.UpdatePrice(article, price);
                     }
+                    else if (column.Tag.ToString() == DELETE_NAME)
+                    {
+
+                        var result = ConfirmationPrompt.ShowDialog("Möchten Sie es wirklich löschen?", "Löschen", "Ja", "Nein");
+                        if (result)
+                        {
+                            ArticleService.Delete(article);
+                        }
+                        
+                    }
 
                     LoadArticles();
 
@@ -189,7 +220,7 @@ namespace WarehousePortal
                     MessageBox.Show(ex1.Message);
                 }
 
-                Console.WriteLine("columnt clicked: " + articles[e.RowIndex].GetArtNo() + "; ColumnName=" + column.Name + "; input=" + input);
+                //Console.WriteLine("columnt clicked: " + articles[e.RowIndex].GetArtNo() + "; ColumnName=" + column.Name + "; input=" + input);
             }
         }
     }

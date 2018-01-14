@@ -16,6 +16,7 @@ namespace WarehousePortal
         public const String ADD_QUANT_COLUMN_NAME = "AddQuant";
         public const String SUB_QUANT_COLUMN_NAME = "SubQuant";
         public const String UPDATE_PRICE_NAME = "UpdatePrice";
+        public const String DELETE_NAME = "Delete";
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
@@ -105,6 +106,15 @@ namespace WarehousePortal
             UpdatePriceColumn.Text = "Preis ändern";
             UpdatePriceColumn.UseColumnTextForButtonValue = true;
             UpdatePriceColumn.Tag = UPDATE_PRICE_NAME;
+
+            var DeleteColumn = new DataGridViewButtonColumn();
+            DeleteColumn.Text = "Löschen";
+            DeleteColumn.UseColumnTextForButtonValue = true;
+            DeleteColumn.Tag = DELETE_NAME;
+
+
+
+
 
 
             this.SearchLabel = new System.Windows.Forms.Label();
@@ -211,7 +221,8 @@ namespace WarehousePortal
                  Quant ,
                  AddQuantColumn ,
                  SubQuantColumn ,
-                 UpdatePriceColumn
+                 UpdatePriceColumn,
+                 DeleteColumn
             });
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 100);
@@ -313,7 +324,7 @@ namespace WarehousePortal
             this.PriceTextBox.Size = new System.Drawing.Size(180, 20);
             this.PriceTextBox.TabIndex = 5;
             this.PriceTextBox.KeyPress += new KeyPressEventHandler(Helper.Number_KeyPress);
-
+            this.PriceTextBox.ShortcutsEnabled = false;
             // 
             // QuantTextBox
             // 
@@ -322,6 +333,7 @@ namespace WarehousePortal
             this.QuantTextBox.Size = new System.Drawing.Size(180, 20);
             this.QuantTextBox.TabIndex = 5;
             this.QuantTextBox.KeyPress += new KeyPressEventHandler(Helper.Int_KeyPress);
+            this.QuantTextBox.ShortcutsEnabled = false;
 
             this.ResetButton.Location = new System.Drawing.Point(5, 180);
             this.ResetButton.Size = new System.Drawing.Size(105, 30);
@@ -336,18 +348,27 @@ namespace WarehousePortal
             // 
             // Warehouse
             // 
+
+            var exe = System.Reflection.Assembly.GetExecutingAssembly();
+            var iconStream = exe.GetManifestResourceStream("WarehousePortal.img.warehouse.ico");
+           
+            if (iconStream != null) Icon = new Icon(iconStream);
+
+            this.Icon = Icon;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MaximumSize = new System.Drawing.Size(1200, 800);
+            this.MaximizeBox = false;
             this.Name = "Warehouse";
-            this.Text = "Warehouse";
+            this.Text = "Warenhaus";
             this.Load += new System.EventHandler(this.Warehouse_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

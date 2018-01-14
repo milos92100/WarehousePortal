@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using WarehousePortal.Entity;
 using WarehousePortal.Service;
 using WarehousePortal.Core;
+using WarehousePortal.Repository;
+using WarehousePortal.Db;
 
 namespace WarehousePortal
 {
@@ -21,18 +23,13 @@ namespace WarehousePortal
         static void Main()
         {
 
-            var logger = Logger.getInstance();
-
-            logger.Debug("Test1 Debug");
-            logger.Debug("Test2 Debug");
-            logger.Warn("Test3 Warn ");
-            logger.Warn("Test4 Warn");
-            logger.Error("Test5 Error");
-            logger.Error("Test6 Error");
+           
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Warehouse());
+
+            
 
         }
     }

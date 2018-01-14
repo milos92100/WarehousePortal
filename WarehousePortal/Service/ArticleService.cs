@@ -101,6 +101,23 @@ namespace WarehousePortal.Service
             }
         }
 
+        public bool Delete(Article article)
+        {
+            var result = GetRepository().Delete(article.GetId());
+
+            switch (result.Status)
+            {
+                case DbResultStatus.OK:
+                    return true;
+
+                case DbResultStatus.ERROR:
+                    throw new OperationCanceledException("Operation failed.Database error accured.");
+
+                default:
+                    throw new OperationCanceledException("Operation failed.Database error accured.");
+            }
+        }
+
         public int SubQuant(Article article, int QuantToSub)
         {
             int NewQuant = article.GetQuant() - QuantToSub;

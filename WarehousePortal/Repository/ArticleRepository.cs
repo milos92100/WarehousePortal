@@ -19,6 +19,8 @@ namespace WarehousePortal.Repository
         private const String GET_ONE_BY_NAME = "SELECT * FROM `articles` WHERE `Name` = @Name LIMIT 1";
         private const String UPDATE_QUANT = "UPDATE `articles` SET `Quant` = @Quant WHERE `Id` = @Id";
         private const String UPDATE_PRICE = "UPDATE `articles` SET `Price` = @Quant WHERE `Id` = @Id";
+        private const String DELETE_ARTICLE = "DELETE FROM `articles` WHERE `Id` = @Id";
+
 
         public ArticleRepository(SQLiteConnection Connection) : base(Connection)
         {
@@ -43,7 +45,7 @@ namespace WarehousePortal.Repository
                 cmd.Parameters.AddWithValue("@Description", article.GetDescription());
                 _logger.Debug("Description=" + article.GetDescription());
 
-                cmd.Parameters.AddWithValue("@Price", article.GetPrice().ToString("0.00"));
+                cmd.Parameters.AddWithValue("@Price", Decimal.Parse(article.GetPrice().ToString("0.00")));
                 _logger.Debug("Price=" + article.GetPrice().ToString("0.00"));
 
                 cmd.Parameters.AddWithValue("@Quant", article.GetQuant());
@@ -88,6 +90,31 @@ namespace WarehousePortal.Repository
             catch (Exception ex)
             {
                 result.Data = 0;
+                result.Status = DbResultStatus.ERROR;
+                result.Msg = ex.Message;
+            }
+
+            return result;
+        }
+
+        public DbResult<bool> Delete(long ArticleId)
+        {
+            var result = new DbResult<bool>();
+            try
+            {
+                SQLiteCommand cmd = new SQLiteCommand(DELETE_ARTICLE, Connection);
+                cmd.Parameters.AddWithValue("@Id", ArticleId);
+
+                var AffectedRows = cmd.ExecuteNonQuery();
+
+                result.Data = true;
+                result.Status = DbResultStatus.OK;
+                result.Msg = "Ok";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("ArticleRepository.Delete -> Exception = " + ex.Message + " " + ex.StackTrace);
+                result.Data = false;
                 result.Status = DbResultStatus.ERROR;
                 result.Msg = ex.Message;
             }
@@ -212,13 +239,13 @@ namespace WarehousePortal.Repository
                 {
                     reader.GetDouble(reader.GetOrdinal("Id"));
 
-                    _logger.Debug("ArticleRepository.Add -> Id = " + reader.GetDouble(reader.GetOrdinal("Id")));
-                    _logger.Debug("ArticleRepository.Add -> ArtNo = " + reader.GetString(reader.GetOrdinal("ArtNo")));
-                    _logger.Debug("ArticleRepository.Add -> Name = " + reader.GetString(reader.GetOrdinal("Name")));
-                    _logger.Debug("ArticleRepository.Add -> Description = " + reader.GetString(reader.GetOrdinal("Description")));
-                    _logger.Debug("ArticleRepository.Add -> Price = " + reader.GetDecimal(reader.GetOrdinal("Price")));
-                    _logger.Debug("ArticleRepository.Add -> Quant = " + reader.GetInt32(reader.GetOrdinal("Quant")));
-                    _logger.Debug("ArticleRepository.Add -> DateTimeAdded = " + reader.GetDateTime(reader.GetOrdinal("DateTimeAdded")));
+                    _logger.Debug("ArticleRepository.getAll -> Id = " + reader.GetDouble(reader.GetOrdinal("Id")));
+                    _logger.Debug("ArticleRepository.getAll -> ArtNo = " + reader.GetString(reader.GetOrdinal("ArtNo")));
+                    _logger.Debug("ArticleRepository.getAll -> Name = " + reader.GetString(reader.GetOrdinal("Name")));
+                    _logger.Debug("ArticleRepository.getAll -> Description = " + reader.GetString(reader.GetOrdinal("Description")));
+                    _logger.Debug("ArticleRepository.getAll -> Price = " + reader.GetDecimal(reader.GetOrdinal("Price")));
+                    _logger.Debug("ArticleRepository.getAll -> Quant = " + reader.GetInt32(reader.GetOrdinal("Quant")));
+                    _logger.Debug("ArticleRepository.getAll -> DateTimeAdded = " + reader.GetDateTime(reader.GetOrdinal("DateTimeAdded")));
 
                     articles.Add(
                         new Article(

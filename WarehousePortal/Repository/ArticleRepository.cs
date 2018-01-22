@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WarehousePortal.Db;
 using WarehousePortal.Entity;
 using WarehousePortal.Core;
+using System.Threading;
 
 namespace WarehousePortal.Repository
 {
@@ -45,7 +46,7 @@ namespace WarehousePortal.Repository
                 cmd.Parameters.AddWithValue("@Description", article.GetDescription());
                 _logger.Debug("Description=" + article.GetDescription());
 
-                cmd.Parameters.AddWithValue("@Price", Decimal.Parse(article.GetPrice().ToString("0.00")));
+                cmd.Parameters.AddWithValue("@Price", Decimal.Parse(article.GetPrice().ToString("0.00"), Thread.CurrentThread.CurrentCulture.NumberFormat));
                 _logger.Debug("Price=" + article.GetPrice().ToString("0.00"));
 
                 cmd.Parameters.AddWithValue("@Quant", article.GetQuant());

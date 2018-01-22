@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WarehousePortal.Core;
@@ -16,6 +18,7 @@ namespace WarehousePortal
 {
     public partial class Warehouse : Form
     {
+
         private ArticleService ArticleService = new ArticleService();
         private List<Article> articles = new List<Article>();
 
@@ -35,10 +38,11 @@ namespace WarehousePortal
         {
             try
             {
+
                 String ArtNo = ArtNoTextBox.Text;
                 String Name = NameTextBox.Text;
                 String Description = DescriptionTextBox.Text;
-                Decimal Price = Decimal.Parse(PriceTextBox.Text);
+                Decimal Price = Decimal.Parse(PriceTextBox.Text, Thread.CurrentThread.CurrentCulture.NumberFormat);
                 int Quant = Int32.Parse(QuantTextBox.Text);
 
                 _logger.Debug("addButton_Click -> begin");
@@ -190,7 +194,7 @@ namespace WarehousePortal
                         {
                             return;
                         }
-                        var price = Decimal.Parse(input);
+                        var price = Decimal.Parse(input, Thread.CurrentThread.CurrentCulture.NumberFormat);
                         ArticleService.UpdatePrice(article, price);
                     }
                     else if (column.Tag.ToString() == DELETE_NAME)
@@ -220,7 +224,6 @@ namespace WarehousePortal
                     MessageBox.Show(ex1.Message);
                 }
 
-                //Console.WriteLine("columnt clicked: " + articles[e.RowIndex].GetArtNo() + "; ColumnName=" + column.Name + "; input=" + input);
             }
         }
     }

@@ -10,6 +10,8 @@ using WarehousePortal.Service;
 using WarehousePortal.Core;
 using WarehousePortal.Repository;
 using WarehousePortal.Db;
+using System.Threading;
+using System.Globalization;
 
 namespace WarehousePortal
 {
@@ -22,8 +24,7 @@ namespace WarehousePortal
         [STAThread]
         static void Main()
         {
-
-           
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-EN");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
